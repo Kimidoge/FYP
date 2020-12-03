@@ -16,29 +16,37 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.contentcapture.DataRemovalRequest;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.widget.ToggleButton;
 
 
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity implements LocationListener , SensorEventListener {
 
+    DatabaseHelper myDb;
+
 
     private static final String TAG = "MainActivity";
     // for accelerometer component
     private TextView xText, yText , zText, xTextGyro, yTextGyro , zTextGyro;
+    private ToggleButton toggle;
     private Sensor accelerometer;
     private Sensor gyroscope;
     private SensorManager sM;
     private SensorEventListener accelerometerListener,gyroscopeEventListener;
+    int readingRate = 500000;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        myDb = new DatabaseHelper(this);
 
         //Assign TextViews to specific axises
         xText =  (TextView) findViewById(R.id.xText);
@@ -49,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         xTextGyro = (TextView) findViewById(R.id.xTextGyro);
         yTextGyro = (TextView) findViewById(R.id.yTextGyro);
         zTextGyro = (TextView) findViewById(R.id.zTextGyro);
+
+        toggle = (ToggleButton) findViewById(R.id.toggleButton);   //toggle for start/stop recording
 
         //Creating the sensor manager; SENSOR_SERVICE is used to access sensors.
         sM = (SensorManager) getSystemService(SENSOR_SERVICE);

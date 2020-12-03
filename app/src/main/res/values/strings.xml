@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Display Speed</string>
+    <string name="Speedtext">-.- km/h</string>
 </resources>
