@@ -27,8 +27,6 @@ import org.w3c.dom.Text;
 public class MainActivity extends AppCompatActivity implements LocationListener , SensorEventListener {
 
     DatabaseHelper myDb;
-
-
     private static final String TAG = "MainActivity";
     // for accelerometer component
     private TextView xText, yText , zText, xTextGyro, yTextGyro , zTextGyro;
@@ -38,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private SensorManager sM;
     private SensorEventListener accelerometerListener,gyroscopeEventListener;
     int readingRate = 500000;
+    public float accelX, accelY, accelZ, gyroX, gyroY, gyroZ;
 
 
     @Override
@@ -117,21 +116,34 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public void onSensorChanged(SensorEvent event) {
         Sensor sensorType = event.sensor;
 
+
+
         if(sensorType.getType()==Sensor.TYPE_ACCELEROMETER) {
             xText.setText("X: " + event.values[0]);
             yText.setText("Y: " + event.values[1]);
             zText.setText("Z: " + event.values[2]);
 
+            accelX = event.values[0];
+            accelY = event.values[1];
+            accelZ = event.values[2];
 
 
         }  else if (sensorType.getType() == Sensor.TYPE_GYROSCOPE){
             xTextGyro.setText("X: " + event.values[0]);
             yTextGyro.setText("Y: " + event.values[1]);
             zTextGyro.setText("Z: " + event.values[2]);
+
+           gyroX = event.values[0];
+           gyroY = event.values[1];
+           gyroZ = event.values[2];
         }
 
 
-        //call sqlite helper function to insert new line
+        DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
+
+
+
+
     }
 
     @Override
