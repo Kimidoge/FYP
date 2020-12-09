@@ -10,20 +10,20 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-
     public static final String SENSOR_TABLE = "SENSOR_TABLE";
     public static final String COLUMN_ACCEL_X = "ACCEL_X";
     public static final String COLUMN_ACCEL_Y = "ACCEL_Y";
     public static final String COLUMN_ACCEL_Z = "ACCEL_Z";
-    //public static final String COLUMN_ID = "ID";
+
     public static final String COLUMN_GYRO_X = "GYRO_X";
     public static final String COLUMN_GYRO_Y = "GYRO_Y";
     public static final String COLUMN_GYRO_Z = "GYRO_Z";
+    public static final String COLUMN_CURRENT_SPEED = "CURRENT_SPEED";
 
     private static DatabaseHelper mInstance;
 
     public DatabaseHelper(Context context) {
-        super(context, "AccelGyro.db", null, 1);
+        super(context, "TESTSPEED.db", null, 1);
 
         SQLiteDatabase db = this.getWritableDatabase();
     }
@@ -42,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //String createTableStatement= "CREATE TABLE " + SENSOR_TABLE + "( " +  COLUMN_ACCEL_X + " REAL, " + COLUMN_ACCEL_Y + " REAL, " + COLUMN_ACCEL_Z + " REAL, time DATETIME DEFAULT CURRENT_TIME)";
-        String createTableStatement= "CREATE TABLE " + SENSOR_TABLE + "( time DATETIME DEFAULT CURRENT_TIME, " +  COLUMN_ACCEL_X + " REAL, " + COLUMN_ACCEL_Y + " REAL, " + COLUMN_ACCEL_Z + " REAL, " + COLUMN_GYRO_X + " REAL, " + COLUMN_GYRO_Y + " REAL, " + COLUMN_GYRO_Z + " REAL)";
+        String createTableStatement= "CREATE TABLE " + SENSOR_TABLE + "( time DATETIME DEFAULT CURRENT_TIME, " +  COLUMN_ACCEL_X + " REAL, " + COLUMN_ACCEL_Y + " REAL, " + COLUMN_ACCEL_Z + " REAL, " + COLUMN_GYRO_X + " REAL, " + COLUMN_GYRO_Y + " REAL, " + COLUMN_GYRO_Z + " REAL, " + COLUMN_CURRENT_SPEED + " REAL)";
         db.execSQL(createTableStatement);
 
 
@@ -55,7 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void insertTable(float x, float y, float z ,float a, float b , float c){  //put onSensorChanged data to database
+    public void insertTable(float x, float y, float z ,float a, float b , float c, double speed){  //put onSensorChanged data to database
 
         ContentValues contentvalues = new ContentValues();
         contentvalues.put("ACCEL_X", x);
@@ -65,6 +65,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentvalues.put("GYRO_X", a);
         contentvalues.put("GYRO_Y", b);
         contentvalues.put("GYRO_Z", c);
+
+        contentvalues.put("CURRENT_SPEED", speed);
 
 
         getWritableDatabase().insert(SENSOR_TABLE, null, contentvalues);

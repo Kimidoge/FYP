@@ -15,8 +15,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.contentcapture.DataRemovalRequest;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private SensorEventListener accelerometerListener,gyroscopeEventListener;
     int readingRate = 500000;
     public float accelX, accelY, accelZ, gyroX, gyroY, gyroZ;
+    private boolean flagToggle;
+    private double globalSpeed;
 
 
     @Override
@@ -68,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if(accelerometer != null){
 
             //Register sensor listener;
-            sM.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-            Log.d(TAG, "onCreate initializing sensors");
+            sM.registerListener(this, accelerometer, 500_000_000);
+            Log.d(TAG, "onCreate initializing accelerometer");
 
         } else{
             xText.setText("Accelerometer not supported");
@@ -84,14 +88,34 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if(gyroscope != null){
 
             //Register sensor listener;
-            sM.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_NORMAL);
-            Log.d(TAG, "onCreate initializing sensors");
+            sM.registerListener(this, gyroscope, 500_000_000);
+            Log.d(TAG, "onCreate initializing gyroscope");
 
         } else{
             xTextGyro.setText("GYROSCOPE not supported");
             yTextGyro.setText("GYROSCOPE not supported");
             zTextGyro.setText("GYROSCOPE not supported");
         }
+
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                flagToggle = false;
+
+                //Log.d("Switch state", " "+isChecked);
+
+                if(toggle.isChecked()){
+                    flagToggle = true;
+                    Toast.makeText(MainActivity.this, "record", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    flagToggle = false;
+                    Toast.makeText(MainActivity.this, "stop", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
 
 
         //create class for location manager
@@ -110,13 +134,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         this.onLocationChanged(null);
 
+
+
+
+
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         Sensor sensorType = event.sensor;
-
-
+        Location location = null;
 
         if(sensorType.getType()==Sensor.TYPE_ACCELEROMETER) {
             xText.setText("X: " + event.values[0]);
@@ -138,8 +165,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
            gyroZ = event.values[2];
         }
 
-
-        DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
+       // if (flagToggle){
+       //     DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
+       // }
+          DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ , globalSpeed);
 
 
 
@@ -177,9 +206,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
         else{
             double currentSpeed = location.getSpeed();
+            globalSpeed = currentSpeed;
 
             speedText.setText(currentSpeed*3.6 + "km/h");
         }
+
+       // DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ , globalSpeed);
 
     }
 
