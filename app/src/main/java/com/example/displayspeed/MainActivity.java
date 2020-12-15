@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if(accelerometer != null){
 
             //Register sensor listener;
-            sM.registerListener(this, accelerometer, 500_000_000);
-            Log.d(TAG, "onCreate initializing accelerometer");
+            sM.registerListener(this, accelerometer, 100_000_000);
+            Log.d("TAG 1", "onCreate initializing accelerometer");
 
         } else{
             xText.setText("Accelerometer not supported");
@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if(gyroscope != null){
 
             //Register sensor listener;
-            sM.registerListener(this, gyroscope, 500_000_000);
-            Log.d(TAG, "onCreate initializing gyroscope");
+            sM.registerListener(this, gyroscope, 100_000_000);
+            Log.d("TAG 2", "onCreate initializing gyroscope");
 
         } else{
             xTextGyro.setText("GYROSCOPE not supported");
@@ -107,10 +107,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 if(toggle.isChecked()){
                     flagToggle = true;
                     Toast.makeText(MainActivity.this, "record", Toast.LENGTH_SHORT).show();
+                    Log.d("Switch state", " "+isChecked);
 
                 } else {
                     flagToggle = false;
                     Toast.makeText(MainActivity.this, "stop", Toast.LENGTH_SHORT).show();
+                    Log.d("Switch state", " "+isChecked);
                 }
 
             }
@@ -168,9 +170,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
        // if (flagToggle){
        //     DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
        // }
-          DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ , globalSpeed);
+        if (flagToggle) {
+            DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
+            Log.d("TAG 3", "Data sent");
 
-
+        }
 
 
     }
