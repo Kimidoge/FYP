@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private double globalSpeed;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
             Log.d("TAG 3", "Data sent");
 
+
         }
 
 
@@ -210,9 +212,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
         else{
             double currentSpeed = location.getSpeed();
-            globalSpeed = currentSpeed;
+            //globalSpeed = currentSpeed;
 
             speedText.setText(currentSpeed*3.6 + "km/h");
+            globalSpeed = currentSpeed*3.6;
+          //  Log.d("TAG speed", " "+ globalSpeed);
+            Log.d("TAG GLOBALSPEED", ""+globalSpeed);
         }
 
        // DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ , globalSpeed);

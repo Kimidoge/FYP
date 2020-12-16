@@ -5,8 +5,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -23,7 +27,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance;
 
     public DatabaseHelper(Context context) {
-        super(context, "TESTSPEED.db", null, 1);
+
+        super(context, String.valueOf(Calendar.getInstance().getTime())+".db", null, 1);
+
+        //Date currentTime = Calendar.getInstance().getTime();
+       // Log.d("TAG DATE", ""+ currentTime);
+
+       // super(context, "Live_Test.db", null, 1);
+
+
 
         SQLiteDatabase db = this.getWritableDatabase();
     }
@@ -43,6 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //String createTableStatement= "CREATE TABLE " + SENSOR_TABLE + "( " +  COLUMN_ACCEL_X + " REAL, " + COLUMN_ACCEL_Y + " REAL, " + COLUMN_ACCEL_Z + " REAL, time DATETIME DEFAULT CURRENT_TIME)";
         String createTableStatement= "CREATE TABLE " + SENSOR_TABLE + "( time DATETIME DEFAULT CURRENT_TIME, " +  COLUMN_ACCEL_X + " REAL, " + COLUMN_ACCEL_Y + " REAL, " + COLUMN_ACCEL_Z + " REAL, " + COLUMN_GYRO_X + " REAL, " + COLUMN_GYRO_Y + " REAL, " + COLUMN_GYRO_Z + " REAL, " + COLUMN_CURRENT_SPEED + " REAL)";
+        Log.d("TAG database", ""+COLUMN_CURRENT_SPEED);
         db.execSQL(createTableStatement);
 
 
