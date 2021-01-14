@@ -55,8 +55,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //String createTableStatement= "CREATE TABLE " + SENSOR_TABLE + "( " +  COLUMN_ACCEL_X + " REAL, " + COLUMN_ACCEL_Y + " REAL, " + COLUMN_ACCEL_Z + " REAL, time DATETIME DEFAULT CURRENT_TIME)";
         String createTableStatement= "CREATE TABLE " + SENSOR_TABLE + "( time DATETIME DEFAULT CURRENT_TIME, " +  COLUMN_ACCEL_X + " REAL, " + COLUMN_ACCEL_Y + " REAL, " + COLUMN_ACCEL_Z + " REAL, " + COLUMN_GYRO_X + " REAL, " + COLUMN_GYRO_Y + " REAL, " + COLUMN_GYRO_Z + " REAL, " + COLUMN_CURRENT_SPEED + " REAL)";
-        Log.d("TAG database", ""+COLUMN_CURRENT_SPEED);
+
         db.execSQL(createTableStatement);
+        Log.d("TAG database :", "DATABASE CREATED");
 
 
     }

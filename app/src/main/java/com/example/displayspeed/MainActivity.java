@@ -38,9 +38,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private SensorManager sM;
     private SensorEventListener accelerometerListener,gyroscopeEventListener;
     int readingRate = 500000;
-    public float accelX, accelY, accelZ, gyroX, gyroY, gyroZ;
+    public float accelX, accelY, accelZ, gyroX, gyroY, gyroZ , offsetAccelY, offsetAccelZ;
     private boolean flagToggle;
     private double globalSpeed;
+
 
 
 
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
         myDb = new DatabaseHelper(this);
+        Log.d("TAG Database helper","myDB created");
 
         //Assign TextViews to specific axises
         xText =  (TextView) findViewById(R.id.xText);
@@ -69,12 +71,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         //Accelerometer Sensor.
         accelerometer = sM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
+        
         if(accelerometer != null){
 
             //Register sensor listener;
             sM.registerListener(this, accelerometer, 100_000_000);
-            Log.d("TAG 1", "onCreate initializing accelerometer");
+            Log.d("TAG 1 Accelerometer ", "onCreate initializing accelerometer");
 
         } else{
             xText.setText("Accelerometer not supported");
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             //Register sensor listener;
             sM.registerListener(this, gyroscope, 100_000_000);
-            Log.d("TAG 2", "onCreate initializing gyroscope");
+            Log.d("TAG 2 Gyroscope", "onCreate initializing gyroscope");
 
         } else{
             xTextGyro.setText("GYROSCOPE not supported");
@@ -102,18 +104,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 flagToggle = false;
+                Log.d("TAG initial switch:", ""+flagToggle);
 
                 //Log.d("Switch state", " "+isChecked);
 
                 if(toggle.isChecked()){
                     flagToggle = true;
-                    Toast.makeText(MainActivity.this, "record", Toast.LENGTH_SHORT).show();
-                    Log.d("Switch state", " "+isChecked);
+                    Toast.makeText(MainActivity.this, "Recording data", Toast.LENGTH_SHORT).show();
+                    Log.d("TAG Switch :", " "+isChecked);
 
                 } else {
                     flagToggle = false;
-                    Toast.makeText(MainActivity.this, "stop", Toast.LENGTH_SHORT).show();
-                    Log.d("Switch state", " "+isChecked);
+                    Toast.makeText(MainActivity.this, "Recording stopped", Toast.LENGTH_SHORT).show();
+                    Log.d("TAG Switch :", " "+isChecked);
                 }
 
             }
@@ -141,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
 
+
     }
 
     @Override
@@ -149,13 +153,21 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Location location = null;
 
         if(sensorType.getType()==Sensor.TYPE_ACCELEROMETER) {
-            xText.setText("X: " + event.values[0]);
-            yText.setText("Y: " + event.values[1]);
-            zText.setText("Z: " + event.values[2]);
+
 
             accelX = event.values[0];
             accelY = event.values[1];
             accelZ = event.values[2];
+
+           xText.setText("X: " + event.values[0]);
+           yText.setText("Y: " + event.values[1]);
+           zText.setText("Z: " + event.values[2]);
+
+            xText.setText("X: " + accelX);
+            yText.setText("Y: " + accelY);
+            zText.setText("Z: " + accelZ);
+
+
 
 
         }  else if (sensorType.getType() == Sensor.TYPE_GYROSCOPE){
@@ -168,15 +180,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
            gyroZ = event.values[2];
         }
 
-       // if (flagToggle){
-       //     DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
-       // }
-        if (flagToggle) {
-            DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
-            Log.d("TAG 3", "Data sent");
 
+        if (flagToggle) {
+
+
+           DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
+           Log.d("TAG Send Data:", "Data sent");
 
         }
+      
 
 
     }
@@ -190,17 +202,21 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     protected void onResume() {
         super.onResume();
-        sM.registerListener(accelerometerListener, accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
-        sM.registerListener(gyroscopeEventListener, gyroscope,SensorManager.SENSOR_DELAY_NORMAL);
+        sM.registerListener(accelerometerListener, accelerometer,100_000_000);
+        sM.registerListener(gyroscopeEventListener, gyroscope,100_000_000);
+        Toast.makeText(this, "onResume started", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onPause() {
+        Toast.makeText(this, "onPause started", Toast.LENGTH_SHORT).show();
+        sM.unregisterListener(accelerometerListener);
+        sM.unregisterListener(gyroscopeEventListener);
         super.onPause();
-        sM.unregisterListener(this);
+       // sM.unregisterListener(this);
 
     }
-
+    
 
     @Override
     public void onLocationChanged(Location location) {
@@ -217,10 +233,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             speedText.setText(currentSpeed*3.6 + "km/h");
             globalSpeed = currentSpeed*3.6;
           //  Log.d("TAG speed", " "+ globalSpeed);
-            Log.d("TAG GLOBALSPEED", ""+globalSpeed);
+            Log.d("TAG GLOBALSPEED :", ""+globalSpeed);
         }
 
-       // DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ , globalSpeed);
+
 
     }
 
