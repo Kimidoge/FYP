@@ -15,6 +15,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.contentcapture.DataRemovalRequest;
@@ -41,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public float accelX, accelY, accelZ, gyroX, gyroY, gyroZ , offsetAccelY, offsetAccelZ;
     private boolean flagToggle;
     private double globalSpeed;
-
 
 
 
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if(accelerometer != null){
 
             //Register sensor listener;
-            sM.registerListener(this, accelerometer, 100_000_000);
+            sM.registerListener(this, accelerometer, 1000000);
             Log.d("TAG 1 Accelerometer ", "onCreate initializing accelerometer");
 
         } else{
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if(gyroscope != null){
 
             //Register sensor listener;
-            sM.registerListener(this, gyroscope, 100_000_000);
+            sM.registerListener(this, gyroscope, 1000000);
             Log.d("TAG 2 Gyroscope", "onCreate initializing gyroscope");
 
         } else{
@@ -152,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Sensor sensorType = event.sensor;
         Location location = null;
 
+
+
         if(sensorType.getType()==Sensor.TYPE_ACCELEROMETER) {
 
 
@@ -183,9 +186,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         if (flagToggle) {
 
+            //a bunch of new codes
+            DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
+            Log.d("TAG sent:","data sent");
 
-           DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
-           Log.d("TAG Send Data:", "Data sent");
+
+          // DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
+          // Log.d("TAG Send Data:", "Data sent");
 
         }
       
@@ -202,8 +209,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     protected void onResume() {
         super.onResume();
-        sM.registerListener(accelerometerListener, accelerometer,100_000_000);
-        sM.registerListener(gyroscopeEventListener, gyroscope,100_000_000);
+        sM.registerListener(accelerometerListener, accelerometer,1000000);
+        sM.registerListener(gyroscopeEventListener, gyroscope,1000000);
         Toast.makeText(this, "onResume started", Toast.LENGTH_SHORT).show();
     }
 
