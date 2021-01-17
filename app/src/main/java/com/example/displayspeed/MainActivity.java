@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        Log.d("TAG thread ", ""+Thread.currentThread().getId());
         myDb = new DatabaseHelper(this);
         Log.d("TAG Database helper","myDB created");
 
@@ -185,10 +185,28 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
         if (flagToggle) {
+            Log.d("TAG :", "begginning");
+            Thread t = new Thread(){
+                @Override
+                public void run() {
+                    while(!isInterrupted()){
+                        Log.d("TAG thread:", ""+Thread.currentThread().getId());
 
+                        try {
+                            Thread.sleep(10000);
+                            //Log.d("TAG thread:", ""+Thread.currentThread().getId());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+
+
+                        }
+                    }
+
+                }
+            };
             //a bunch of new codes
             DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
-            Log.d("TAG sent:","data sent");
+             Log.d("TAG sent:","data sent");
 
 
           // DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
@@ -240,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             speedText.setText(currentSpeed*3.6 + "km/h");
             globalSpeed = currentSpeed*3.6;
           //  Log.d("TAG speed", " "+ globalSpeed);
-            Log.d("TAG GLOBALSPEED :", ""+globalSpeed);
+           // Log.d("TAG GLOBALSPEED :", ""+globalSpeed);
         }
 
 
