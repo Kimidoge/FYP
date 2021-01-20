@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.View;
 import android.view.contentcapture.DataRemovalRequest;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -186,37 +187,48 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         if (flagToggle) {
            // Log.d("TAG :", "begginning");
-            Thread t = new Thread(){
-                @Override
-                public void run() {
-                    while(!isInterrupted()){
-                        Log.d("TAG thread:", ""+Thread.currentThread().getId());
-
-                        try {
-                            Thread.sleep(10000);
-                            //Log.d("TAG thread:", ""+Thread.currentThread().getId());
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-
-
-                        }
-                    }
-
-                }
-            };
+            //==========START THREAD HERE =====================//
+            ExampleThread thread = new ExampleThread();
+            thread.start();
             //a bunch of new codes
             DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
              Log.d("TAG sent:","data sent");
 
-
-          // DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
-          // Log.d("TAG Send Data:", "Data sent");
-
         }
-      
+
+    }
+
+    class ExampleThread extends Thread{
+
+        Thread t = new Thread(){
+            @Override
+            public void run() {
+                while(!isInterrupted()){
+                    Log.d("TAG thread:", ""+Thread.currentThread().getId());
+
+                    try {
+                        Thread.sleep(5000);
+                        //Log.d("TAG thread:", ""+Thread.currentThread().getId());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+
+                    }
+                }
+
+            }
+        };
 
 
     }
+
+    public void startThread(View view){
+
+    }
+
+    public void stopThread(View view){
+
+    }
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
