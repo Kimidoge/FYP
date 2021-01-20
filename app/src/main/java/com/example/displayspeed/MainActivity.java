@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Log.d("TAG thread ", ""+Thread.currentThread().getId());
+        Log.println(Log.INFO, "ThreadID", "ThreadID: "+String.valueOf(Thread.currentThread().getId()));
+        //Log.d("TAG thread ", ""+Thread.currentThread().getId());
         //myDb = new DatabaseHelper(this);
        // Log.d("TAG Database helper","myDB created");
 
@@ -186,13 +186,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
         if (flagToggle) {
-           // Log.d("TAG :", "begginning");
+
             //==========START THREAD HERE =====================//
             ExampleThread thread = new ExampleThread();
             thread.start();
+            try {
+                thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             //a bunch of new codes
-            DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
-             Log.d("TAG sent:","data sent");
+            //DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
+             //Log.d("TAG sent:","data sent");
 
         }
 
@@ -200,23 +205,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     class ExampleThread extends Thread{
 
-        Thread t = new Thread(){
             @Override
             public void run() {
-                while(!isInterrupted()){
-                    Log.d("TAG thread:", ""+Thread.currentThread().getId());
 
-                    try {
-                        Thread.sleep(5000);
-                        //Log.d("TAG thread:", ""+Thread.currentThread().getId());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
 
-                    }
-                }
+                Log.println(Log.INFO, "ThreadID", "ThreadID: "+String.valueOf(Thread.currentThread().getId()));
+                DatabaseHelper.getInstance().insertTable(accelX, accelY, accelZ, gyroX, gyroY, gyroZ, globalSpeed);
+                Log.d("TAG sent:","data sent");
+
+
 
             }
-        };
 
 
     }
