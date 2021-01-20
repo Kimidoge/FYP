@@ -30,13 +30,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         super(context, String.valueOf(Calendar.getInstance().getTime())+".db", null, 1);
 
-        //Date currentTime = Calendar.getInstance().getTime();
-       // Log.d("TAG DATE", ""+ currentTime);
-
-       // super(context, "Live_Test.db", null, 1);
-
-
-
         SQLiteDatabase db = this.getWritableDatabase();
     }
 
@@ -54,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //String createTableStatement= "CREATE TABLE " + SENSOR_TABLE + "( " +  COLUMN_ACCEL_X + " REAL, " + COLUMN_ACCEL_Y + " REAL, " + COLUMN_ACCEL_Z + " REAL, time DATETIME DEFAULT CURRENT_TIME)";
-        String createTableStatement= "CREATE TABLE " + SENSOR_TABLE + "( time DATETIME DEFAULT CURRENT_TIME, " +  COLUMN_ACCEL_X + " REAL, " + COLUMN_ACCEL_Y + " REAL, " + COLUMN_ACCEL_Z + " REAL, " + COLUMN_GYRO_X + " REAL, " + COLUMN_GYRO_Y + " REAL, " + COLUMN_GYRO_Z + " REAL, " + COLUMN_CURRENT_SPEED + " REAL)";
+        String createTableStatement= "CREATE TABLE " + SENSOR_TABLE + "( TIME DATETIME DEFAULT CURRENT_TIME, " +  COLUMN_ACCEL_X + " REAL, " + COLUMN_ACCEL_Y + " REAL, " + COLUMN_ACCEL_Z + " REAL, " + COLUMN_GYRO_X + " REAL, " + COLUMN_GYRO_Y + " REAL, " + COLUMN_GYRO_Z + " REAL, " + COLUMN_CURRENT_SPEED + " REAL)";
 
         db.execSQL(createTableStatement);
         Log.d("TAG database :", "DATABASE CREATED");

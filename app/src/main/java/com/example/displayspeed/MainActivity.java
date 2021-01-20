@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         setContentView(R.layout.activity_main);
 
         Log.d("TAG thread ", ""+Thread.currentThread().getId());
-        myDb = new DatabaseHelper(this);
-        Log.d("TAG Database helper","myDB created");
+        //myDb = new DatabaseHelper(this);
+       // Log.d("TAG Database helper","myDB created");
 
         //Assign TextViews to specific axises
         xText =  (TextView) findViewById(R.id.xText);
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
         if (flagToggle) {
-            Log.d("TAG :", "begginning");
+           // Log.d("TAG :", "begginning");
             Thread t = new Thread(){
                 @Override
                 public void run() {
