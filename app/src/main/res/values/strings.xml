@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Display Speed</string>
     <string name="Speedtext">-.- km/h</string>
+
+    <string-array name="numbers">
+        <item>Right</item>
+        <item>Left</item>
+        <item>Accelerate</item>
+        <item>Brake</item>
+    </string-array>
 </resources>
