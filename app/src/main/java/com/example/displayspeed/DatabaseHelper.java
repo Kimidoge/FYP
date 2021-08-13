@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance;
 
     public DatabaseHelper(Context context) {
-        super(context, "TESTDATA.db", null, 1);
+        super(context, "3_August_FYP2.db", null, 1);
         //super(context, String.valueOf(Calendar.getInstance().getTime())+".db", null, 1);
 
          db = this.getWritableDatabase();

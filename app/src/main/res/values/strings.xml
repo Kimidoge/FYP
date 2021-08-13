@@ -7,5 +7,10 @@
         <item>Left</item>
         <item>Accelerate</item>
         <item>Brake</item>
+        <item>Idling</item>
+        <item>Aggressive Right</item>
+        <item>Aggressive Left</item>
+        <item>Aggressive Accelerate</item>
+        <item>Aggressive Brake</item>
     </string-array>
 </resources>
